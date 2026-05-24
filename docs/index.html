@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>libpt Documentation</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            color: #000000;
+            background-color: #ffffff;
+        }
+        aside {
+            width: 280px;
+            background-color: #d3d3d3;
+            border-right: 2px solid #808080;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .sidebar-header {
+            padding: 15px;
+            background-color: #c0c0c0;
+            border-bottom: 2px solid #808080;
+        }
+        .sidebar-header h1 {
+            font-size: 1.4rem;
+            margin: 0;
+            color: #000000;
+        }
+        .search-box {
+            padding: 10px 15px;
+            background-color: #d3d3d3;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 4px;
+            border: 2px inset #ffffff;
+            box-sizing: border-box;
+            font-family: "Times New Roman", Times, serif;
+        }
+        nav {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+        details {
+            margin-bottom: 2px;
+        }
+        summary {
+            padding: 6px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: #c0c0c0;
+            border-top: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+        }
+        .nav-item {
+            padding: 4px 30px;
+            display: block;
+            text-decoration: underline;
+            color: #0000ff;
+            font-size: 1.1rem;
+        }
+        .nav-item:hover {
+            color: #ff0000;
+            background-color: #ffffff;
+        }
+        .nav-item.active {
+            background-color: #ffffff;
+            color: #000000;
+            font-weight: bold;
+            text-decoration: none;
+            border: 1px dotted #000000;
+        }
+        main {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background-color: #ffffff;
+        }
+        section {
+            display: none;
+            max-width: 850px;
+        }
+        section.active {
+            display: block;
+        }
+        h2 {
+            color: #000000;
+            background-color: #e0e0e0;
+            border: 1px solid #808080;
+            padding: 8px;
+            margin-top: 35px;
+            font-size: 1.6rem;
+        }
+        h3 {
+            font-size: 1.3rem;
+            border-bottom: 1px solid #000000;
+            margin-top: 25px;
+            padding-bottom: 3px;
+        }
+        .signature {
+            background-color: #f0f0f0;
+            border: 1px solid #000000;
+            padding: 12px;
+            font-family: "Courier New", Courier, monospace;
+            margin: 15px 0;
+            font-weight: bold;
+            white-space: pre;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border: 1px solid #000000;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border: 1px solid #000000;
+        }
+        th {
+            background-color: #d3d3d3;
+        }
+        .remarks {
+            background-color: #ffffcc;
+            padding: 12px;
+            border: 1px solid #808080;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        .home-page {
+            text-align: left;
+        }
+        .home-page h1 {
+            font-size: 4rem;
+            color: #000080;
+            margin: 0;
+            border-bottom: 4px double #000080;
+        }
+        .philosophy {
+            margin-top: 30px;
+        }
+        .phi-card {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #000000;
+            background: #f0f0f0;
+        }
+        .phi-card h3 {
+            margin-top: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <div class="sidebar-header">
+            <h1>libpt Documentation</h1>
+        </div>
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Filter functions..." onkeyup="filterFunctions()">
+        </div>
+        <nav id="nav-tree">
+            <a href="#home" class="nav-item active" onclick="showSection('home')">Home</a>
+            
+            <details open>
+                <summary>Encoding</summary>
+                <a href="#pthexe" class="nav-item" onclick="showSection('pthexe')">pthexe</a>
+                <a href="#pthexd" class="nav-item" onclick="showSection('pthexd')">pthexd</a>
+                <a href="#ptb64e" class="nav-item" onclick="showSection('ptb64e')">ptb64e</a>
+                <a href="#ptb64d" class="nav-item" onclick="showSection('ptb64d')">ptb64d</a>
+                <a href="#pturle" class="nav-item" onclick="showSection('pturle')">pturle</a>
+                <a href="#pturld" class="nav-item" onclick="showSection('pturld')">pturld</a>
+                <a href="#ptprintfilt" class="nav-item" onclick="showSection('ptprintfilt')">ptprintfilt</a>
+                <a href="#ptbitrev32" class="nav-item" onclick="showSection('ptbitrev32')">ptbitrev32</a>
+            </details>
+
+            <details>
+                <summary>Cryptography</summary>
+                <a href="#ptxore" class="nav-item" onclick="showSection('ptxore')">ptxore</a>
+                <a href="#ptrotl32" class="nav-item" onclick="showSection('ptrotl32')">ptrotl32</a>
+                <a href="#ptrotr32" class="nav-item" onclick="showSection('ptrotr32')">ptrotr32</a>
+                <a href="#ptfnv1a" class="nav-item" onclick="showSection('ptfnv1a')">ptfnv1a</a>
+                <a href="#ptcrc32" class="nav-item" onclick="showSection('ptcrc32')">ptcrc32</a>
+                <a href="#pthashxor" class="nav-item" onclick="showSection('pthashxor')">pthashxor</a>
+                <a href="#ptentropy" class="nav-item" onclick="showSection('ptentropy')">ptentropy</a>
+                <a href="#ptmemxor" class="nav-item" onclick="showSection('ptmemxor')">ptmemxor</a>
+                <a href="#ptkeyexp" class="nav-item" onclick="showSection('ptkeyexp')">ptkeyexp</a>
+                <a href="#ptrandom" class="nav-item" onclick="showSection('ptrandom')">ptrandom</a>
+            </details>
+
+            <details>
+                <summary>Networking</summary>
+                <a href="#ptnetcon" class="nav-item" onclick="showSection('ptnetcon')">ptnetcon</a>
+                <a href="#ptnetbind" class="nav-item" onclick="showSection('ptnetbind')">ptnetbind</a>
+                <a href="#ptnetacc" class="nav-item" onclick="showSection('ptnetacc')">ptnetacc</a>
+                <a href="#ptnetsnd" class="nav-item" onclick="showSection('ptnetsnd')">ptnetsnd</a>
+                <a href="#ptnetrcv" class="nav-item" onclick="showSection('ptnetrcv')">ptnetrcv</a>
+                <a href="#ptnetcls" class="nav-item" onclick="showSection('ptnetcls')">ptnetcls</a>
+                <a href="#ptnetnonblk" class="nav-item" onclick="showSection('ptnetnonblk')">ptnetnonblk</a>
+                <a href="#ptnetdns" class="nav-item" onclick="showSection('ptnetdns')">ptnetdns</a>
+                <a href="#ptnetpollr" class="nav-item" onclick="showSection('ptnetpollr')">ptnetpollr</a>
+                <a href="#ptnetpollw" class="nav-item" onclick="showSection('ptnetpollw')">ptnetpollw</a>
+            </details>
+
+            <details>
+                <summary>File IO</summary>
+                <a href="#ptioread" class="nav-item" onclick="showSection('ptioread')">ptioread</a>
+                <a href="#ptiowrite" class="nav-item" onclick="showSection('ptiowrite')">ptiowrite</a>
+                <a href="#ptiosize" class="nav-item" onclick="showSection('ptiosize')">ptiosize</a>
+                <a href="#ptioexists" class="nav-item" onclick="showSection('ptioexists')">ptioexists</a>
+                <a href="#ptiomap" class="nav-item" onclick="showSection('ptiomap')">ptiomap</a>
+                <a href="#ptiounmap" class="nav-item" onclick="showSection('ptiounmap')">ptiounmap</a>
+            </details>
+
+            <details>
+                <summary>Process / OS</summary>
+                <a href="#ptprocfind" class="nav-item" onclick="showSection('ptprocfind')">ptprocfind</a>
+                <a href="#ptproclist" class="nav-item" onclick="showSection('ptproclist')">ptproclist</a>
+                <a href="#ptproccmd" class="nav-item" onclick="showSection('ptproccmd')">ptproccmd</a>
+                <a href="#ptprocrun" class="nav-item" onclick="showSection('ptprocrun')">ptprocrun</a>
+                <a href="#ptprockill" class="nav-item" onclick="showSection('ptprockill')">ptprockill</a>
+                <a href="#ptprocself" class="nav-item" onclick="showSection('ptprocself')">ptprocself</a>
+            </details>
+
+            <details>
+                <summary>System</summary>
+                <a href="#ptsyspage" class="nav-item" onclick="showSection('ptsyspage')">ptsyspage</a>
+                <a href="#ptsysuptime" class="nav-item" onclick="showSection('ptsysuptime')">ptsysuptime</a>
+                <a href="#ptsyscpu" class="nav-item" onclick="showSection('ptsyscpu')">ptsyscpu</a>
+                <a href="#ptsyshost" class="nav-item" onclick="showSection('ptsyshost')">ptsyshost</a>
+                <a href="#ptsysuid" class="nav-item" onclick="showSection('ptsysuid')">ptsysuid</a>
+                <a href="#ptsysgid" class="nav-item" onclick="showSection('ptsysgid')">ptsysgid</a>
+            </details>
+
+            <details>
+                <summary>Parsing</summary>
+                <a href="#ptelfprs" class="nav-item" onclick="showSection('ptelfprs')">ptelfprs</a>
+                <a href="#ptelfsec" class="nav-item" onclick="showSection('ptelfsec')">ptelfsec</a>
+                <a href="#ptpeprs" class="nav-item" onclick="showSection('ptpeprs')">ptpeprs</a>
+                <a href="#ptpesec" class="nav-item" onclick="showSection('ptpesec')">ptpesec</a>
+            </details>
+
+            <details>
+                <summary>Examples</summary>
+                <a href="#ex-net" class="nav-item" onclick="showSection('ex-net')">Networking</a>
+                <a href="#ex-cry" class="nav-item" onclick="showSection('ex-cry')">Cryptography</a>
+                <a href="#ex-proc" class="nav-item" onclick="showSection('ex-proc')">Process</a>
+                <a href="#ex-io" class="nav-item" onclick="showSection('ex-io')">File IO</a>
+            </details>
+        </nav>
+    </aside>
+
+    <main id="content">
+        <section id="home" class="active">
+            <div class="home-page">
+                <h1>libpt</h1>
+                <p>A minimalist C library for systems programming and penetration testing.</p>
+                <div class="philosophy">
+                    <div class="phi-card">
+                        <h3>Pentest Functions</h3>
+                        <p>Built-in support for common post-exploitation tasks, encoding, and networking.</p>
+                    </div>
+                    <div class="phi-card">
+                        <h3>Zero Dependencies</h3>
+                        <p>Self-contained library with minimal reliance on external system libraries.</p>
+                    </div>
+                    <div class="phi-card">
+                        <h3>Strict Naming</h3>
+                        <p>Consistent prefixing and clear function signatures for predictable development.</p>
+                    </div>
+                    <div class="phi-card">
+                        <h3>Compilation</h3>
+                        <p>To compile programs using libpt, link with the <code>-lpt</code> flag:<br>
+                        <code>gcc main.c -lpt -o myapp</code></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pthexe">
+            <h2>pthexe</h2>
+            <div class="signature">u32 pthexe(u8 *buf, u32 bufs, char *hex);</div>
+            <p>Encodes a binary buffer into a hex-encoded string.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Pointer to the input binary buffer.</td></tr>
+                <tr><td>bufs</td><td>Size of the input buffer in bytes.</td></tr>
+                <tr><td>hex</td><td>Output buffer for the null-terminated hex string. Must be at least (bufs * 2) + 1.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Returns the number of bytes written to the hex string (excluding null terminator).</p>
+            <div class="remarks"><strong>Remarks:</strong> This function does not perform bounds checking on the output buffer.</div>
+        </section>
+
+        <section id="pthexd">
+            <h2>pthexd</h2>
+            <div class="signature">u32 pthexd(const char *hex, u8 *buf);</div>
+            <p>Decodes a hex-encoded string into a binary buffer.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>hex</td><td>Null-terminated input hex string.</td></tr>
+                <tr><td>buf</td><td>Output buffer for decoded binary data.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Returns the number of bytes written to the output buffer.</p>
+        </section>
+
+        <section id="ptb64e">
+            <h2>ptb64e</h2>
+            <div class="signature">u32 ptb64e(const u8 *in, u32 len, char *out);</div>
+            <p>Encodes binary data into Base64 format.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>in</td><td>Input binary data.</td></tr>
+                <tr><td>len</td><td>Length of input data.</td></tr>
+                <tr><td>out</td><td>Output buffer for Base64 string.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Returns length of the encoded string.</p>
+        </section>
+
+        <section id="ptb64d">
+            <h2>ptb64d</h2>
+            <div class="signature">u32 ptb64d(const char *in, u8 *out);</div>
+            <p>Decodes a Base64 encoded string.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>in</td><td>Input Base64 string.</td></tr>
+                <tr><td>out</td><td>Output buffer for decoded data.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Returns length of decoded data.</p>
+        </section>
+
+        <section id="pturle">
+            <h2>pturle</h2>
+            <div class="signature">u32 pturle(const char *in, char *out);</div>
+            <p>URL-encodes a string.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>in</td><td>Input string.</td></tr>
+                <tr><td>out</td><td>Output buffer for URL-encoded string.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Returns length of encoded string.</p>
+        </section>
+
+        <section id="pturld">
+            <h2>pturld</h2>
+            <div class="signature">u32 pturld(const char *in, char *out);</div>
+            <p>URL-decodes a string.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>in</td><td>Input URL-encoded string.</td></tr>
+                <tr><td>out</td><td>Output buffer for decoded string.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Returns length of decoded string.</p>
+        </section>
+
+        <section id="ptprintfilt">
+            <h2>ptprintfilt</h2>
+            <div class="signature">void ptprintfilt(char *s);</div>
+            <p>Filters a string to keep only printable characters, replacing others with dots.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>s</td><td>String to filter in-place.</td></tr>
+            </table>
+        </section>
+
+        <section id="ptbitrev32">
+            <h2>ptbitrev32</h2>
+            <div class="signature">u32 ptbitrev32(u32 v);</div>
+            <p>Reverses the bits in a 32-bit unsigned integer.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>v</td><td>Value to reverse.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>The bit-reversed value.</p>
+        </section>
+
+        <section id="ptxore">
+            <h2>ptxore</h2>
+            <div class="signature">void ptxore(u8 *buf, u32 bufs, u8 *key, u32 klen);</div>
+            <p>Performs in-place XOR encryption/decryption.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Data buffer to encrypt/decrypt.</td></tr>
+                <tr><td>bufs</td><td>Size of the data buffer.</td></tr>
+                <tr><td>key</td><td>XOR key buffer.</td></tr>
+                <tr><td>klen</td><td>Length of the key.</td></tr>
+            </table>
+        </section>
+
+        <section id="ptrotl32">
+            <h2>ptrotl32</h2>
+            <div class="signature">u32 ptrotl32(u32 v, u8 n);</div>
+            <p>Rotates bits of a 32-bit integer to the left.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>v</td><td>Value to rotate.</td></tr>
+                <tr><td>n</td><td>Number of bits to rotate.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>The rotated value.</p>
+        </section>
+
+        <section id="ptrotr32">
+            <h2>ptrotr32</h2>
+            <div class="signature">u32 ptrotr32(u32 v, u8 n);</div>
+            <p>Rotates bits of a 32-bit integer to the right.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>v</td><td>Value to rotate.</td></tr>
+                <tr><td>n</td><td>Number of bits to rotate.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>The rotated value.</p>
+        </section>
+
+        <section id="ptfnv1a">
+            <h2>ptfnv1a</h2>
+            <div class="signature">u32 ptfnv1a(const u8 *buf, u32 bufs);</div>
+            <p>Computes the FNV-1a hash of a buffer.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Input data buffer.</td></tr>
+                <tr><td>bufs</td><td>Size of the input buffer.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>The 32-bit FNV-1a hash.</p>
+        </section>
+
+        <section id="ptcrc32">
+            <h2>ptcrc32</h2>
+            <div class="signature">u32 ptcrc32(const u8 *buf, u32 bufs);</div>
+            <p>Computes the CRC32 checksum of a buffer.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Input data buffer.</td></tr>
+                <tr><td>bufs</td><td>Size of the input buffer.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>The 32-bit CRC32 checksum.</p>
+        </section>
+
+        <section id="pthashxor">
+            <h2>pthashxor</h2>
+            <div class="signature">u32 pthashxor(const u8 *buf, u32 bufs);</div>
+            <p>A simple rolling XOR hash of a buffer.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Input data buffer.</td></tr>
+                <tr><td>bufs</td><td>Size of the input buffer.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>The 32-bit XOR hash.</p>
+        </section>
+
+        <section id="ptentropy">
+            <h2>ptentropy</h2>
+            <div class="signature">u8 ptentropy(const u8 *buf, u32 bufs);</div>
+            <p>Estimates the Shannon entropy of a buffer.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Input data buffer.</td></tr>
+                <tr><td>bufs</td><td>Size of the input buffer.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Entropy value scaled to 0-255.</p>
+        </section>
+
+        <section id="ptmemxor">
+            <h2>ptmemxor</h2>
+            <div class="signature">void ptmemxor(u8 *dst, const u8 *src, u32 bufs);</div>
+            <p>XORs two memory regions and stores the result in dst.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>dst</td><td>Destination buffer.</td></tr>
+                <tr><td>src</td><td>Source buffer.</td></tr>
+                <tr><td>bufs</td><td>Number of bytes to XOR.</td></tr>
+            </table>
+        </section>
+
+        <section id="ptkeyexp">
+            <h2>ptkeyexp</h2>
+            <div class="signature">void ptkeyexp(u8 *key, u32 klen, u8 *out, u32 olen);</div>
+            <p>Expands a short key into a larger buffer using a simple PRNG based on the key.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>key</td><td>Initial key.</td></tr>
+                <tr><td>klen</td><td>Length of initial key.</td></tr>
+                <tr><td>out</td><td>Output buffer for expanded key.</td></tr>
+                <tr><td>olen</td><td>Desired length of expanded key.</td></tr>
+            </table>
+        </section>
+
+        <section id="ptrandom">
+            <h2>ptrandom</h2>
+            <div class="signature">u32 ptrandom(void);</div>
+            <p>Generates a pseudo-random 32-bit integer.</p>
+            <h3>Return Value</h3>
+            <p>A random 32-bit unsigned integer.</p>
+        </section>
+
+        <section id="ptnetcon">
+            <h2>ptnetcon</h2>
+            <div class="signature">int ptnetcon(const char *ip, u16 prt);</div>
+            <p>Connects to a remote TCP server.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>ip</td><td>Target IP address string.</td></tr>
+                <tr><td>prt</td><td>Target port number.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Socket descriptor on success, -1 on failure.</p>
+        </section>
+
+        <section id="ptnetbind">
+            <h2>ptnetbind</h2>
+            <div class="signature">int ptnetbind(const char *ip, u16 prt);</div>
+            <p>Binds a socket and listens for incoming connections.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>ip</td><td>IP address to bind to (NULL for all interfaces).</td></tr>
+                <tr><td>prt</td><td>Port number to listen on.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Socket descriptor on success, -1 on failure.</p>
+        </section>
+
+        <section id="ptnetacc">
+            <h2>ptnetacc</h2>
+            <div class="signature">int ptnetacc(int s);</div>
+            <p>Accepts an incoming connection on a listening socket.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>s</td><td>Listening socket descriptor.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>New socket descriptor for the accepted connection, -1 on failure.</p>
+        </section>
+
+        <section id="ptnetsnd">
+            <h2>ptnetsnd</h2>
+            <div class="signature">int ptnetsnd(int s, u8 *buf, u32 bufs);</div>
+            <p>Sends data over a socket.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>s</td><td>Socket descriptor.</td></tr>
+                <tr><td>buf</td><td>Buffer containing data to send.</td></tr>
+                <tr><td>bufs</td><td>Number of bytes to send.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Number of bytes sent, or -1 on failure.</p>
+        </section>
+
+        <section id="ptnetrcv">
+            <h2>ptnetrcv</h2>
+            <div class="signature">int ptnetrcv(int s, u8 *buf, u32 bufs);</div>
+            <p>Receives data from a socket.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>s</td><td>Socket descriptor.</td></tr>
+                <tr><td>buf</td><td>Buffer to store received data.</td></tr>
+                <tr><td>bufs</td><td>Maximum bytes to receive.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Number of bytes received, 0 on disconnect, or -1 on failure.</p>
+        </section>
+
+        <section id="ptnetcls">
+            <h2>ptnetcls</h2>
+            <div class="signature">void ptnetcls(int s);</div>
+            <p>Closes a socket descriptor.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>s</td><td>Socket descriptor to close.</td></tr>
+            </table>
+        </section>
+
+        <section id="ptnetnonblk">
+            <h2>ptnetnonblk</h2>
+            <div class="signature">int ptnetnonblk(int s, bool nb);</div>
+            <p>Sets or clears the non-blocking mode of a socket.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>s</td><td>Socket descriptor.</td></tr>
+                <tr><td>nb</td><td>True for non-blocking, false for blocking.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>0 on success, -1 on failure.</p>
+        </section>
+
+        <section id="ptnetdns">
+            <h2>ptnetdns</h2>
+            <div class="signature">int ptnetdns(const char *host, char *ip);</div>
+            <p>Resolves a hostname to an IP address.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>host</td><td>Hostname to resolve.</td></tr>
+                <tr><td>ip</td><td>Buffer to store resolved IP string.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>0 on success, -1 on failure.</p>
+        </section>
+
+        <section id="ptnetpollr">
+            <h2>ptnetpollr</h2>
+            <div class="signature">int ptnetpollr(int s, int tmo);</div>
+            <p>Polls a socket for readability.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>s</td><td>Socket descriptor.</td></tr>
+                <tr><td>tmo</td><td>Timeout in milliseconds.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Positive if ready, 0 on timeout, -1 on error.</p>
+        </section>
+
+        <section id="ptnetpollw">
+            <h2>ptnetpollw</h2>
+            <div class="signature">int ptnetpollw(int s, int tmo);</div>
+            <p>Polls a socket for writability.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>s</td><td>Socket descriptor.</td></tr>
+                <tr><td>tmo</td><td>Timeout in milliseconds.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Positive if ready, 0 on timeout, -1 on error.</p>
+        </section>
+
+        <section id="ptioread">
+            <h2>ptioread</h2>
+            <div class="signature">int ptioread(const char *path, u8 *buf, u32 bufs);</div>
+            <p>Reads a file into a buffer.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>path</td><td>Path to the file.</td></tr>
+                <tr><td>buf</td><td>Buffer to store data.</td></tr>
+                <tr><td>bufs</td><td>Maximum bytes to read.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Number of bytes read, or -1 on failure.</p>
+        </section>
+
+        <section id="ptiowrite">
+            <h2>ptiowrite</h2>
+            <div class="signature">int ptiowrite(const char *path, u8 *buf, u32 bufs);</div>
+            <p>Writes a buffer to a file.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>path</td><td>Path to the file.</td></tr>
+                <tr><td>buf</td><td>Data to write.</td></tr>
+                <tr><td>bufs</td><td>Number of bytes to write.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Number of bytes written, or -1 on failure.</p>
+        </section>
+
+        <section id="ptiosize">
+            <h2>ptiosize</h2>
+            <div class="signature">u64 ptiosize(const char *path);</div>
+            <p>Gets the size of a file.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>path</td><td>Path to the file.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>File size in bytes, or 0 if not found/empty.</p>
+        </section>
+
+        <section id="ptioexists">
+            <h2>ptioexists</h2>
+            <div class="signature">bool ptioexists(const char *path);</div>
+            <p>Checks if a file exists.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>path</td><td>Path to the file.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>True if the file exists, false otherwise.</p>
+        </section>
+
+        <section id="ptiomap">
+            <h2>ptiomap</h2>
+            <div class="signature">void* ptiomap(const char *path, u32 *sz);</div>
+            <p>Maps a file into memory.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>path</td><td>Path to the file.</td></tr>
+                <tr><td>sz</td><td>Output pointer to store the size of the mapped region.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>Pointer to mapped memory, or NULL on failure.</p>
+        </section>
+
+        <section id="ptiounmap">
+            <h2>ptiounmap</h2>
+            <div class="signature">void ptiounmap(void *p, u32 sz);</div>
+            <p>Unmaps a previously mapped memory region.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>p</td><td>Pointer to mapped memory.</td></tr>
+                <tr><td>sz</td><td>Size of the region.</td></tr>
+            </table>
+        </section>
+
+        <section id="ptprocfind">
+            <h2>ptprocfind</h2>
+            <div class="signature">int ptprocfind(const char *name);</div>
+            <p>Finds the PID of a process by its name.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>name</td><td>Process name to search for.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>The PID of the first match, or -1 if not found.</p>
+        </section>
+
+        <section id="ptproclist">
+            <h2>ptproclist</h2>
+            <div class="signature">u32 ptproclist(int *pids, u32 max);</div>
+            <p>Retrieves a list of all running process IDs.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>pids</td><td>Array to store PIDs.</td></tr>
+                <tr><td>max</td><td>Maximum number of PIDs to retrieve.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>The total number of PIDs found.</p>
+        </section>
+
+        <section id="ptproccmd">
+            <h2>ptproccmd</h2>
+            <div class="signature">int ptproccmd(int pid, char *buf, u32 bufs);</div>
+            <p>Gets the command line of a specific process.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>pid</td><td>Process ID.</td></tr>
+                <tr><td>buf</td><td>Buffer to store command line.</td></tr>
+                <tr><td>bufs</td><td>Size of the buffer.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>0 on success, -1 on failure.</p>
+        </section>
+
+        <section id="ptprocrun">
+            <h2>ptprocrun</h2>
+            <div class="signature">int ptprocrun(const char *path, char *const argv[]);</div>
+            <p>Executes a new process.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>path</td><td>Path to the executable.</td></tr>
+                <tr><td>argv</td><td>NULL-terminated array of arguments.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>The PID of the new process, or -1 on failure.</p>
+        </section>
+
+        <section id="ptprockill">
+            <h2>ptprockill</h2>
+            <div class="signature">int ptprockill(int pid);</div>
+            <p>Terminates a process.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>pid</td><td>Process ID to kill.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>0 on success, -1 on failure.</p>
+        </section>
+
+        <section id="ptprocself">
+            <h2>ptprocself</h2>
+            <div class="signature">int ptprocself(void);</div>
+            <p>Gets the current process ID.</p>
+            <h3>Return Value</h3>
+            <p>The PID of the calling process.</p>
+        </section>
+
+        <section id="ptsyspage">
+            <h2>ptsyspage</h2>
+            <div class="signature">u32 ptsyspage(void);</div>
+            <p>Gets the system page size.</p>
+            <h3>Return Value</h3>
+            <p>Page size in bytes.</p>
+        </section>
+
+        <section id="ptsysuptime">
+            <h2>ptsysuptime</h2>
+            <div class="signature">u64 ptsysuptime(void);</div>
+            <p>Gets the system uptime.</p>
+            <h3>Return Value</h3>
+            <p>Uptime in seconds since boot.</p>
+        </section>
+
+        <section id="ptsyscpu">
+            <h2>ptsyscpu</h2>
+            <div class="signature">u32 ptsyscpu(void);</div>
+            <p>Gets the number of logical CPU cores.</p>
+            <h3>Return Value</h3>
+            <p>Number of CPU cores.</p>
+        </section>
+
+        <section id="ptsyshost">
+            <h2>ptsyshost</h2>
+            <div class="signature">void ptsyshost(char *buf, u32 bufs);</div>
+            <p>Gets the system hostname.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Buffer to store the hostname.</td></tr>
+                <tr><td>bufs</td><td>Size of the buffer.</td></tr>
+            </table>
+        </section>
+
+        <section id="ptsysuid">
+            <h2>ptsysuid</h2>
+            <div class="signature">u32 ptsysuid(void);</div>
+            <p>Gets the current user ID.</p>
+            <h3>Return Value</h3>
+            <p>User ID.</p>
+        </section>
+
+        <section id="ptsysgid">
+            <h2>ptsysgid</h2>
+            <div class="signature">u32 ptsysgid(void);</div>
+            <p>Gets the current group ID.</p>
+            <h3>Return Value</h3>
+            <p>Group ID.</p>
+        </section>
+
+        <section id="ptelfprs">
+            <h2>ptelfprs</h2>
+            <div class="signature">int ptelfprs(u8 *buf, u32 bufs, ptelfhdr *hdr);</div>
+            <p>Parses an ELF file header.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Buffer containing the ELF file.</td></tr>
+                <tr><td>bufs</td><td>Size of the buffer.</td></tr>
+                <tr><td>hdr</td><td>Pointer to struct to store header info.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>0 on success, -1 if invalid ELF.</p>
+        </section>
+
+        <section id="ptelfsec">
+            <h2>ptelfsec</h2>
+            <div class="signature">int ptelfsec(u8 *buf, u32 bufs, ptelfhdr *hdr, u16 idx, ptelfshdr *shdr);</div>
+            <p>Retrieves an ELF section header by index.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Buffer containing the ELF file.</td></tr>
+                <tr><td>bufs</td><td>Size of the buffer.</td></tr>
+                <tr><td>hdr</td><td>Parsed ELF header.</td></tr>
+                <tr><td>idx</td><td>Section index.</td></tr>
+                <tr><td>shdr</td><td>Pointer to struct to store section header info.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>0 on success, -1 on failure.</p>
+        </section>
+
+        <section id="ptpeprs">
+            <h2>ptpeprs</h2>
+            <div class="signature">int ptpeprs(u8 *buf, u32 bufs, ptpedos *dos, ptpehdr *hdr);</div>
+            <p>Parses a PE file header.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Buffer containing the PE file.</td></tr>
+                <tr><td>bufs</td><td>Size of the buffer.</td></tr>
+                <tr><td>dos</td><td>Pointer to struct for DOS header.</td></tr>
+                <tr><td>hdr</td><td>Pointer to struct for PE header.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>0 on success, -1 if invalid PE.</p>
+        </section>
+
+        <section id="ptpesec">
+            <h2>ptpesec</h2>
+            <div class="signature">int ptpesec(u8 *buf, u32 bufs, ptpehdr *hdr, u16 idx, ptpeshdr *shdr);</div>
+            <p>Retrieves a PE section header by index.</p>
+            <h3>Parameters</h3>
+            <table>
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr><td>buf</td><td>Buffer containing the PE file.</td></tr>
+                <tr><td>bufs</td><td>Size of the buffer.</td></tr>
+                <tr><td>hdr</td><td>Parsed PE header.</td></tr>
+                <tr><td>idx</td><td>Section index.</td></tr>
+                <tr><td>shdr</td><td>Pointer to struct to store section header info.</td></tr>
+            </table>
+            <h3>Return Value</h3>
+            <p>0 on success, -1 on failure.</p>
+        </section>
+
+        <section id="ex-net">
+            <h2>Networking Example</h2>
+            <p>Simple TCP server and client interaction using libpt.</p>
+            <pre class="signature">
+#include &lt;pt/net.h&gt;
+#include &lt;pt/types.h&gt;
+#include &lt;stdio.h&gt;
+
+/* 
+ * Standalone example demonstrating a basic TCP server using libpt.
+ * To compile: gcc example_net.c -lpt -o example_net
+ */
+int main() {
+    /* TCP Server listening on 127.0.0.1:8080 */
+    int server_sock = ptnetbind("127.0.0.1", 8080);
+    
+    if (server_sock != -1) {
+        printf("Server listening on 127.0.0.1:8080...\n");
+        
+        /* Accept an incoming connection from a client */
+        int client_sock = ptnetacc(server_sock);
+        if (client_sock != -1) {
+            char buffer[1024] = {0};
+            /* Receive data from the connected client */
+            int bytes = ptnetrcv(client_sock, (u8*)buffer, sizeof(buffer));
+            
+            if (bytes > 0) {
+                printf("Received: %s\n", buffer);
+                /* Send a response back to the client */
+                ptnetsnd(client_sock, (u8*)"Hello from libpt!", 17);
+            }
+            /* Close the client connection */
+            ptnetcls(client_sock);
+        }
+        /* Close the server listening socket */
+        ptnetcls(server_sock);
+    } else {
+        printf("Failed to bind server socket.\n");
+        return 1;
+    }
+    
+    return 0;
+}
+            </pre>
+        </section>
+
+        <section id="ex-cry">
+            <h2>Cryptography Example</h2>
+            <p>Demonstrating XOR encryption followed by Base64 encoding.</p>
+            <pre class="signature">
+#include &lt;pt/cry.h&gt;
+#include &lt;pt/enc.h&gt;
+#include &lt;pt/types.h&gt;
+#include &lt;stdio.h&gt;
+
+/* 
+ * Standalone example demonstrating XOR encryption and Base64 encoding.
+ * To compile: gcc example_cry.c -lpt -o example_cry
+ */
+int main() {
+    /* Data to be protected and the XOR key */
+    u8 data[] = "Secret Message";
+    u32 data_len = 14;
+    u8 key[] = "key123";
+    u32 key_len = 6;
+    char b64_out[128] = {0};
+
+    /* 
+     * Perform in-place XOR encryption. 
+     * This function will cycle the key over the data buffer.
+     */
+    ptxore(data, data_len, key, key_len);
+
+    /* 
+     * Encode the resulting encrypted (binary) data into a Base64 string 
+     * for safe transport or storage in text formats.
+     */
+    ptb64e(data, data_len, b64_out);
+
+    printf("Encrypted and Base64 encoded: %s\n", b64_out);
+
+    return 0;
+}
+            </pre>
+        </section>
+
+        <section id="ex-proc">
+            <h2>Process Example</h2>
+            <p>Finding a process by name and retrieving its full command line.</p>
+            <pre class="signature">
+#include &lt;pt/proc.h&gt;
+#include &lt;pt/types.h&gt;
+#include &lt;stdio.h&gt;
+
+/* 
+ * Standalone example demonstrating process search and command line retrieval.
+ * To compile: gcc example_proc.c -lpt -o example_proc
+ */
+int main() {
+    /* Search for a running process named "firefox" */
+    int pid = ptprocfind("firefox");
+    
+    if (pid != -1) {
+        char cmdline[512] = {0};
+        /* 
+         * Retrieve the command line arguments used to start the process.
+         * This reads from the system's process information (e.g., /proc on Linux).
+         */
+        if (ptproccmd(pid, cmdline, sizeof(cmdline)) == 0) {
+            printf("Found firefox (PID: %d)\nCommand line: %s\n", pid, cmdline);
+        } else {
+            printf("Found firefox (PID: %d) but failed to retrieve cmdline.\n", pid);
+        }
+    } else {
+        printf("Process 'firefox' not found.\n");
+    }
+
+    return 0;
+}
+            </pre>
+        </section>
+
+        <section id="ex-io">
+            <h2>File IO Example</h2>
+            <p>Mapping a file into the process memory space for efficient reading.</p>
+            <pre class="signature">
+#include &lt;pt/io.h&gt;
+#include &lt;pt/types.h&gt;
+#include &lt;stdio.h&gt;
+
+/* 
+ * Standalone example demonstrating memory-mapped file IO.
+ * To compile: gcc example_io.c -lpt -o example_io
+ */
+int main() {
+    /* 
+     * Map the entire content of "config.dat" into the virtual address space.
+     * This avoids manual buffer management and multiple read() syscalls.
+     */
+    u32 file_size = 0;
+    void *map = ptiomap("config.dat", &amp;file_size);
+
+    if (map != NULL) {
+        /* 
+         * The file content can now be accessed directly via memory pointers.
+         * For example, checking the first byte of the file:
+         */
+        u8 first_byte = ((u8*)map)[0];
+        printf("Successfully mapped 'config.dat' (%u bytes).\n", file_size);
+        printf("First byte: 0x%02x\n", first_byte);
+        
+        /* 
+         * Once finished, the memory region must be unmapped to release resources.
+         * The size passed must match the size returned by ptiomap.
+         */
+        ptiounmap(map, file_size);
+    } else {
+        printf("Failed to map 'config.dat'. Please ensure the file exists.\n");
+        return 1;
+    }
+
+    return 0;
+}
+            </pre>
+        </section>
+    </main>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(a => a.classList.remove('active'));
+            const navLink = document.querySelector(`nav a[href="#${id}"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+                let parent = navLink.closest('details');
+                if (parent) parent.open = true;
+            }
+        }
+
+        function filterFunctions() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (item.getAttribute('href') === '#home') return;
+
+                if (text.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('details').forEach(det => {
+                const items = det.querySelectorAll('.nav-item');
+                let anyVisible = false;
+                items.forEach(i => { if (i.style.display !== 'none') anyVisible = true; });
+                det.style.display = anyVisible ? 'block' : 'none';
+                if (query && anyVisible) det.open = true;
+            });
+        }
+
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) showSection(hash);
+        });
+
+        if (window.location.hash) {
+            showSection(window.location.hash.substring(1));
+        }
+    </script>
+</body>
+</html>
